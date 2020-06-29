@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_WALL, DELETE_POST, ADD_POST } from './types';
+import { GET_WALL, DELETE_POST, ADD_POST, GET_ERRORS } from './types';
 
 //GET WALL POSTS
 export const getWall = () => dispatch => {
@@ -35,5 +35,14 @@ export const addPost = (wall) => dispatch => {
                 type: ADD_POST,
                 payload: res.data
             })
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            const errors = {
+                msg: err.response.data,
+                status: err.response.status
+            }
+            dispatch({
+                type: GET_ERRORS,
+                payload: errors
+            });
+        });
 };
