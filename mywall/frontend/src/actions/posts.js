@@ -1,6 +1,6 @@
 import { CREATE_POSTS, GET_ERRORS } from './types'
 
-export const createPost = msg => {
+export const createPosts = msg => {
     return {
         type: CREATE_POSTS,
         payload: msg

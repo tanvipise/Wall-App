@@ -12,7 +12,7 @@ export const getWall = () => dispatch => {
                 type: GET_WALL,
                 payload: res.data
             })
-        }).catch(err => dispatch(returnErrors(err.reponse.data, err.reponse.status)));
+        }).catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 
 // DELETE POST
@@ -41,6 +41,6 @@ export const addPost = (wall) => dispatch => {
                 type: ADD_POST,
                 payload: res.data
             })
-        }).catch(err => dispatch(returnErrors(err.reponse.data, err.reponse.status)));
+        }).catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 

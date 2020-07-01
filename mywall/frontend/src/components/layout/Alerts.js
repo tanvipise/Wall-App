@@ -6,17 +6,17 @@ import PropTypes from 'prop-types'
 
 export class Alerts extends Component {
     static propTypes = {
-        error: PropTypes.object.isRequired,
-        post: PropTypes.object.isRequired
+        errors: PropTypes.object.isRequired,
+        posts: PropTypes.object.isRequired
     }
 
     componentDidUpdate(prevProps) {
-        const { error, alert, post } = this.props;
+        const { errors, alert, post } = this.props;
 
-        if (error !== prevProps.error) {
-            if (error.msg.name) alert.error(`Name: ${error.msg.name.join()}`);
-            if (error.msg.email) alert.error(`Email: ${error.msg.email.join()}`);
-            if (error.msg.post) alert.error(`Post: ${error.msg.post.join()}`);
+        if (errors !== prevProps.errors) {
+            if (errors.msg.name) alert.errors(`Name: ${errors.msg.name.join()}`);
+            if (errors.msg.email) alert.errors(`Email: ${errors.msg.email.join()}`);
+            if (errors.msg.post) alert.errors(`Post: ${errors.msg.post.join()}`);
 
         }
         if (post !== prevProps.post) {
@@ -34,7 +34,7 @@ export class Alerts extends Component {
 }
 
 const mapStateToProps = state => ({
-    error: state.error,
+    errors: state.errors,
     posts: state.posts
 });
 
