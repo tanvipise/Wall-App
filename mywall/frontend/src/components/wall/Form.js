@@ -40,12 +40,15 @@ export class Form extends Component {
                     <p className="card-text"></p>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
+                            <div>
+                                <label>Enter your name:</label>
+                                <input type="text" className="form-control" onChange={this.onChange} name="name" value={name} ></input>
+                            </div>
 
-                            <label>Enter your name</label>
-                            <input type="text" className="form-control" onChange={this.onChange} name="name" value={name} ></input>
-
-                            <label>Enter your email</label>
-                            <input type="email" className="form-control" onChange={this.onChange} name="email" value={email}></input>
+                            <div className="form-group">
+                                <label>Enter your email:</label>
+                                <input type="email" className="form-control" onChange={this.onChange} name="email" value={email}></input>
+                            </div>
 
                             <label>Write something here....</label>
                             <textarea className="form-control" rows="5" id="mypost" onChange={this.onChange} name="post" value={post} ></textarea>
