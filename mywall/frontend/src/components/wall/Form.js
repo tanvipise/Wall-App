@@ -23,6 +23,11 @@ export class Form extends Component {
         const { name, email, post } = this.state;
         const wall = { name, email, post };
         this.props.addPost(wall);
+        this.setState({
+            name: '',
+            email: '',
+            post: ''
+        });
     };
 
 

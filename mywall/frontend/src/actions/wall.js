@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { GET_WALL, DELETE_POST, ADD_POST, GET_ERRORS } from './types';
+import { createPosts, returnErrors } from './posts'
+
+import { GET_WALL, DELETE_POST, ADD_POST } from './types';
 
 //GET WALL POSTS
 export const getWall = () => dispatch => {
@@ -10,7 +12,7 @@ export const getWall = () => dispatch => {
                 type: GET_WALL,
                 payload: res.data
             })
-        }).catch(err => console.log(err));
+        }).catch(err => dispatch(returnErrors(err.reponse.data, err.reponse.status)));
 };
 
 // DELETE POST
@@ -18,6 +20,8 @@ export const deletePost = (id) => dispatch => {
 
     axios.delete(`/api/wall/${id}/`)
         .then(res => {
+            dispatch(createPosts({ deletePost: 'Post Deleted' }));
+
             dispatch({
                 type: DELETE_POST,
                 payload: id
@@ -31,18 +35,12 @@ export const addPost = (wall) => dispatch => {
 
     axios.post("/api/wall/", wall)
         .then(res => {
+            dispatch(createPosts({ addPost: 'Post Added' }));
+
             dispatch({
                 type: ADD_POST,
                 payload: res.data
             })
-        }).catch(err => {
-            const errors = {
-                msg: err.response.data,
-                status: err.response.status
-            }
-            dispatch({
-                type: GET_ERRORS,
-                payload: errors
-            });
-        });
+        }).catch(err => dispatch(returnErrors(err.reponse.data, err.reponse.status)));
 };
+
