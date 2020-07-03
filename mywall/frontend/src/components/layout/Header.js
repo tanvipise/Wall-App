@@ -1,9 +1,44 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { logout } from '../../actions/auth'
 
 export class Header extends Component {
+    static propTypes = {
+        auth: PropTypes.object.isRequired,
+        logout: PropTypes.func.isRequired
+    };
+
     render() {
+        const { isAuthenticated, user } = this.props.auth;
+
+        const authLinks = (
+            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                <span className="navbar-text mr-3">
+                    <strong>
+                        {user ? `Welcome ${user.username}` : ""}
+                    </strong>
+                </span>
+                <button onClick={this.props.logout} className="nav-link btn btn-info btn-sm text-light"> Logout </button>
+
+            </ul>
+        );
+
+        const guestLinks = (
+            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                <nav className="navbar-brand navbar-dark bg-dark">
+                    <Link to="./register">Register </Link>
+                </nav>
+                <nav className="navbar-brand navbar-dark bg-dark">
+                    <Link to="./login">Login </Link>
+                </nav>
+
+            </ul>
+        );
+
+
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container">
@@ -12,34 +47,16 @@ export class Header extends Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
                         <a className="navbar-brand" href="#">My Wall</a>
-                        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-                            <nav className="navbar-brand navbar-dark bg-dark">
-                                <Link to="./register">Register </Link>
-                            </nav>
-                            <nav className="navbar-brand navbar-dark bg-dark">
-                                <Link to="./login">Login </Link>
-                            </nav>
-
-                        </ul>
-
                     </div>
+                    {isAuthenticated ? authLinks : guestLinks}
                 </div>
             </nav>
 
-            // <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-            //     <Navbar.Brand href="#home">My Wall</Navbar.Brand>
-            //     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            //     <Navbar.Collapse id="responsive-navbar-nav">
-            //         <Nav className="mr-auto"></Nav>
-
-            //         <Nav>
-            //             <Nav.Link href="/register">Register</Nav.Link>
-            //             <Nav.Link href="/login">Login</Nav.Link>
-            //         </Nav>
-            //     </Navbar.Collapse>
-            // </Navbar>
         )
     }
 }
+const mapStateToProps = state => ({
+    auth: state.auth
+});
 
-export default Header
+export default connect(mapStateToProps, { logout })(Header)

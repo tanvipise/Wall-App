@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { Navbar } from 'react-bootstrap'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+
+import { login } from '../../actions/auth'
 
 export class Login extends Component {
     state = {
@@ -10,13 +13,19 @@ export class Login extends Component {
 
     };
 
+    static propTypes = {
+        login: PropTypes.func.isRequired,
+        isAuthenticated: PropTypes.bool
+    };
+
     onSubmit = e => {
         e.preventDefault();
-        console.log('submit')
+        this.props.login(this.state.username, this.state.password);
+
 
         // const { name, email, post } = this.state;
         // const wall = { name, email, post };
-        // this.props.addPost(wall);
+        // this.props.login(this.state.username);
         // this.setState({
         //     name: '',
         //     email: '',
@@ -27,6 +36,10 @@ export class Login extends Component {
     onChange = e => this.setState({ [e.target.name]: e.target.value });
 
     render() {
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/" />
+        }
+
         const { username, password } = this.state;
         return (
             <div className="card">
@@ -66,4 +79,8 @@ export class Login extends Component {
     }
 }
 
-export default Login
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);

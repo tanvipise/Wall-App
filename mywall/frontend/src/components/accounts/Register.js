@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+import { register } from '../../actions/auth'
+import { createPosts } from '../../actions/posts'
 
 export class Register extends Component {
     state = {
@@ -11,23 +15,36 @@ export class Register extends Component {
 
     };
 
+    static propTypes = {
+        register: PropTypes.func.isRequired,
+        isAuthenticated: PropTypes.bool
+    };
+
     onSubmit = e => {
         e.preventDefault();
         console.log('submit')
 
-        // const { name, email, post } = this.state;
-        // const wall = { name, email, post };
-        // this.props.addPost(wall);
-        // this.setState({
-        //     name: '',
-        //     email: '',
-        //     post: ''
-        // });
+        const { username, email, password, password2 } = this.state;
+        if (password !== password2) {
+            this.props.createPosts({ passwordNotMatch: 'Passwords do not match' });
+        }
+        else {
+            const newUser = {
+                username,
+                password,
+                email
+            }
+            this.props.register(newUser);
+        }
     };
 
     onChange = e => this.setState({ [e.target.name]: e.target.value });
 
     render() {
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/" />
+        }
+
         const { username, email, password, password2 } = this.state;
         return (
             <div className="card">
@@ -53,7 +70,7 @@ export class Register extends Component {
 
                             <div className="form-group">
                                 <label>Confirm password:</label>
-                                <input type="password2" className="form-control" onChange={this.onChange} name="password2" value={password2}></input>
+                                <input type="password" className="form-control" onChange={this.onChange} name="password2" value={password2}></input>
                             </div>
 
                             <div className="form-group">
@@ -77,4 +94,9 @@ export class Register extends Component {
     }
 }
 
-export default Register
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { register, createPosts })(Register);

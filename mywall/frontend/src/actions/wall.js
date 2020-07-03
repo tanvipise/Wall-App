@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { createPosts, returnErrors } from './posts'
-
+import { tokenConfig } from './auth'
 import { GET_WALL, DELETE_POST, ADD_POST } from './types';
 
 //GET WALL POSTS
-export const getWall = () => dispatch => {
+export const getWall = () => (dispatch, getState) => {
 
-    axios.get("/api/wall/")
+    axios.get("/api/wall/", tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: GET_WALL,
@@ -16,9 +16,9 @@ export const getWall = () => dispatch => {
 };
 
 // DELETE POST
-export const deletePost = (id) => dispatch => {
+export const deletePost = (id) => (dispatch, getState) => {
 
-    axios.delete(`/api/wall/${id}/`)
+    axios.delete(`/api/wall/${id}/`, tokenConfig(getState))
         .then(res => {
             dispatch(createPosts({ deletePost: 'Post Deleted' }));
 
@@ -31,9 +31,9 @@ export const deletePost = (id) => dispatch => {
 
 //ADD POST
 
-export const addPost = (wall) => dispatch => {
+export const addPost = (wall) => (dispatch, getState) => {
 
-    axios.post("/api/wall/", wall)
+    axios.post("/api/wall/", wall, tokenConfig(getState))
         .then(res => {
             dispatch(createPosts({ addPost: 'Post Added' }));
 

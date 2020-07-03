@@ -10,20 +10,10 @@ class WallViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated
     ]
 
+    serializer_class = WallSerializer
 
-serializer_class = WallSerializer
+    def get_queryset(self):
+        return self.request.user.user.all()
 
-
-# def get_queryset(self):
-#     if not self.request.user.is_authenticated:
-#         raise PermissionDenied()
-
-#     return self.request.user.wall.all()
-
-def get_queryset(self):
-    return self.request.user.wall.all()
-
-
-def perform_create(self, serializer):
-
-    serializer.save(owner=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
